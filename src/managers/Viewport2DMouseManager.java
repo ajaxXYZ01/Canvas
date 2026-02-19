@@ -40,6 +40,8 @@ public class Viewport2DMouseManager implements MouseInputListener, MouseWheelLis
         // manually assign 0 to optimize: large object creation
         lastMousePressed.x = 0;
         lastMousePressed.y = 0;
+
+        
     }
 
     @Override
@@ -64,7 +66,6 @@ public class Viewport2DMouseManager implements MouseInputListener, MouseWheelLis
                 Viewport2DElementManager.moveSelectedElements(dx, dy, viewport);
                 viewport.UpdateWorldBounds();
                 viewport.repaint();
-
                 return;
             }
 

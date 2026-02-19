@@ -22,7 +22,7 @@ public class Point2D extends ViewportElement {
         this.y = y;
 
         size  = 8;
-        color = new Color(0, 128, 255);
+        color = new Color(255, 0, 0);
 
         setSelectable(true);
     }
@@ -42,21 +42,31 @@ public class Point2D extends ViewportElement {
     @Override
     public void render(Graphics2D gfx2d, Viewport2D viewport2d) {
 
+        int px = viewport2d.screenX(x);
+        int py = viewport2d.screenY(y);
+
+        size *= 4;
+
         if (selected) {
-            size *= 2;
-            gfx2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 64));
-            gfx2d.fillOval(viewport2d.screenX(x) - size / 2, viewport2d.screenY(y) - size / 2, size, size);    
-            size /= 2;
+            gfx2d.setColor(color);
+            gfx2d.fillOval(px - size / 2, py - size / 2, size, size);
+            size /= 4;
+            return;
         }
+
+        gfx2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 64));
+        gfx2d.fillOval(px - size / 2, py - size / 2, size, size);
+
+        size /= 4;
         gfx2d.setColor(color);
-        gfx2d.fillOval(viewport2d.screenX(x) - size / 2, viewport2d.screenY(y) - size / 2, size, size);
+        gfx2d.fillOval(px - size / 2, py - size / 2, size, size);
     }
 
     @Override
     public void select(int x, int y, Viewport2D viewport2d) {
         float dx = x - viewport2d.screenX(this.x);
         float dy = y - viewport2d.screenY(this.y);
-        float r  = size * 0.5f * 1.5f;
+        float r  = size * 2;
 
         if (dx*dx + dy*dy <= r*r) {
             select();
