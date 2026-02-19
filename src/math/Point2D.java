@@ -45,15 +45,11 @@ public class Point2D extends ViewportElement {
         if (selected) {
             size *= 2;
             gfx2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 64));
-            gfx2d.fillOval(viewport2d.screenX(x) - size / 2, viewport2d.screenY(y) - size / 2, size, size);
-            
+            gfx2d.fillOval(viewport2d.screenX(x) - size / 2, viewport2d.screenY(y) - size / 2, size, size);    
             size /= 2;
-            gfx2d.setColor(color);
-            gfx2d.fillOval(viewport2d.screenX(x) - size / 2, viewport2d.screenY(y) - size / 2, size, size);
-        } else {
-            gfx2d.setColor(color);
-            gfx2d.fillOval(viewport2d.screenX(x) - size / 2, viewport2d.screenY(y) - size / 2, size, size);
         }
+        gfx2d.setColor(color);
+        gfx2d.fillOval(viewport2d.screenX(x) - size / 2, viewport2d.screenY(y) - size / 2, size, size);
     }
 
     @Override

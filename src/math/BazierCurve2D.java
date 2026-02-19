@@ -1,5 +1,6 @@
 package math;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -9,53 +10,56 @@ import viewport.ViewportElement;
 
 public class BazierCurve2D extends ViewportElement {
     
-    ArrayList <Point2D> anchorPoints;
     ArrayList <Point2D> controlPoints;
 
     private int bufferSize;
     private Point buffer [];
 
+    // Variables
     int quality;
+    BasicStroke curveStroke;
+
     private float timeStep;
 
     public BazierCurve2D() {
-        anchorPoints  = new ArrayList <> ();
-        controlPoints = new ArrayList <> ();
+        controlPoints  = new ArrayList <> ();
 
         quality  = 32;
         timeStep = 1f / quality;
+
+        setStrokeSize(2);
     }
 
     // --- Utils ---
     public void addPoint(float x, float y) {
-        anchorPoints.add(new Point2D(x, y));
-        recalculateControlPoints();
+        controlPoints.add(new Point2D(x, y));
+    }
+
+    public void setStrokeSize(float thickness) {
+        curveStroke = new BasicStroke(thickness);
     }
 
     public static float lerp(float a, float b, float t) {
         return (b - a) * t + a;
     }
 
-    public void recalculateControlPoints() {
-        controlPoints.clear();
+    // Simple Data Structure for point coordinates
+    private class Point {
+        float x, y;
 
-        for (int index = 0; index < anchorPoints.size() - 1; index++) {
-            Point2D p1 = anchorPoints.get(index);
-            Point2D p2 = anchorPoints.get(index + 1);
+        Point(float x, float y) {
+            this.x = x;
+            this.y = y;
+        }
 
-            float midx = (p1.x + p2.x) / 2;
-            float midy = (p1.y + p2.y) / 2;
-
-            Point2D midPoint = new Point2D(midx, midy);
-            midPoint.setColor(Color.RED);
-
-            controlPoints.add(midPoint);
+        void print() {
+            System.out.println(x + ", " + y);
         }
     }
 
     private void init_Buffer() {
 
-        bufferSize = 2 * anchorPoints.size() - 1;
+        bufferSize = controlPoints.size();
 
         if (buffer == null || buffer.length != bufferSize)
             buffer = new Point [bufferSize];
@@ -65,16 +69,9 @@ public class BazierCurve2D extends ViewportElement {
         }
 
         for (int index = 0; index < bufferSize; index++) {
-
-            if (index % 2 == 0) {
-                Point2D anchor = anchorPoints.get(index / 2);
-                buffer[index].x = anchor.x;
-                buffer[index].y = anchor.y;
-            } else {
-                Point2D control = controlPoints.get(index / 2);
-                buffer[index].x = control.x;
-                buffer[index].y = control.y;
-            }
+            Point2D anchor = controlPoints.get(index);
+            buffer[index].x = anchor.x;
+            buffer[index].y = anchor.y;
         }
     }
 
@@ -94,44 +91,27 @@ public class BazierCurve2D extends ViewportElement {
         return buffer[0];
     }
     
+    // --- Overrides ---
+
     @Override
     public void render(Graphics2D gfx2d, Viewport2D viewport2d) {
         
         gfx2d.setColor(Color.WHITE);
+        gfx2d.setStroke(curveStroke);
+
         for (float t = 0; t <= 1 - timeStep; t += timeStep) {
             Point temp1 = getInterpolatedPoint(t);
             Point temp2 = getInterpolatedPoint(t + timeStep);
             gfx2d.drawLine(viewport2d.screenX(temp1.x), viewport2d.screenY(temp1.y), viewport2d.screenX(temp2.x), viewport2d.screenY(temp2.y));
         }
 
-        for (Point2D point2d : anchorPoints) {
-            point2d.render(gfx2d, viewport2d);
-        }
         for (Point2D point2d : controlPoints) {
             point2d.render(gfx2d, viewport2d);
         }
-    }
-
-    // Simple Data Structure for point coordinates
-    private class Point {
-        float x, y;
-
-        Point(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        void print() {
-            System.out.println(x + ", " + y);
-        }
-    }
+    }    
 
     @Override
     public void select(int x, int y, Viewport2D viewport2d) {
-        for (Point2D point2d : anchorPoints) {
-            point2d.select(x, y, viewport2d);
-        }
-
         for (Point2D point2d : controlPoints) {
             point2d.select(x, y, viewport2d);
         }
@@ -139,11 +119,6 @@ public class BazierCurve2D extends ViewportElement {
 
     @Override
     public void offset(int dx, int dy, Viewport2D viewport2d) {
-        for (Point2D point2d : anchorPoints) {
-            if (point2d.isSelected())
-                point2d.offset(dx, dy, viewport2d);
-        }
-
         for (Point2D point2d : controlPoints) {
             if (point2d.isSelected())
                 point2d.offset(dx, dy, viewport2d);
@@ -152,17 +127,10 @@ public class BazierCurve2D extends ViewportElement {
 
     @Override
     public boolean isSelected() {
-
         boolean bool = false;
-
-        for (Point2D point2d : anchorPoints) {
-            bool |= point2d.isSelected();
-        }
-
         for (Point2D point2d : controlPoints) {
             bool |= point2d.isSelected();
         }
-
         return bool;
     }
 

@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import viewport.Viewport2D;
 import managers.Viewport2DElementManager;
 import math.BazierCurve2D;
+import viewport.Viewport2D;
 
 class Frame extends JFrame {
 
