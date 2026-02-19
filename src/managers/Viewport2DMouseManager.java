@@ -11,32 +11,35 @@ public class Viewport2DMouseManager implements MouseInputListener, MouseWheelLis
 
     Viewport2D viewport;
 
-    boolean mouseDown;
-    private static final float UP_FAC = 1.1f;
+    boolean mouseLeftDown;
+    private static final float UP_FAC   = 1.1f;
     private static final float DOWN_FAC = 1 / UP_FAC;
-    Point lastMouse;
+    Point lastMousePressed;
 
     public Viewport2DMouseManager(Viewport2D viewport) {
-        this.viewport = viewport;
+        this.viewport    = viewport;
+        lastMousePressed = new Point();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        //
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        mouseDown = true;
-        lastMouse = e.getPoint();
+        mouseLeftDown    = true;
+        lastMousePressed = e.getPoint();
+        Viewport2DElementManager.selectElements(e, viewport);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        mouseDown = false;
+        mouseLeftDown = false;
 
         // manually assign 0 to optimize: large object creation
-        lastMouse.x = 0;
-        lastMouse.y = 0;
+        lastMousePressed.x = 0;
+        lastMousePressed.y = 0;
     }
 
     @Override
@@ -49,13 +52,21 @@ public class Viewport2DMouseManager implements MouseInputListener, MouseWheelLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (mouseDown) {
+        if (mouseLeftDown) {
             
-            int dx = e.getX() - lastMouse.x;
-            int dy = e.getY() - lastMouse.y;
+            int dx = e.getX() - lastMousePressed.x;
+            int dy = e.getY() - lastMousePressed.y;
 
-            lastMouse.x = e.getX();
-            lastMouse.y = e.getY();
+            lastMousePressed.x = e.getX();
+            lastMousePressed.y = e.getY();
+
+            if (Viewport2DElementManager.hasSelectedElements()) {
+                Viewport2DElementManager.moveSelectedElements(dx, dy, viewport);
+                viewport.UpdateWorldBounds();
+                viewport.repaint();
+
+                return;
+            }
 
             Point vOrigin = viewport.getOrigin();
             viewport.setOrigin(vOrigin.x + dx, vOrigin.y + dy);
@@ -87,9 +98,9 @@ public class Viewport2DMouseManager implements MouseInputListener, MouseWheelLis
 
         viewport.setPPU(viewport.getPPU() * FACTOR);
 
+        viewport.UpdateStep();
         viewport.UpdateCenterOnScroll(e.getPoint(), FACTOR);
         viewport.UpdateWorldBounds();
         viewport.repaint();
     }
-    
 }

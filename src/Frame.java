@@ -6,17 +6,21 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import viewport.Viewport2D;
+import managers.Viewport2DElementManager;
+import math.BazierCurve2D;
 
 class Frame extends JFrame {
 
     Frame() {
 
         this.setTitle("Canvas: " + LocalDateTime.now());
+
         try {
             this.setIconImage(ImageIO.read(new File("E:\\Java projects\\Canvas\\res\\icon.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         this.add(new Viewport2D(1024, 512));
@@ -29,4 +33,5 @@ class Frame extends JFrame {
     public static void main(String args[]) {
         new Frame();
     }
+
 }

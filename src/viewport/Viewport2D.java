@@ -1,3 +1,7 @@
+/* FIX: private Point center has Interger coordinates.
+ * While scrolling, center loses its fraction part so the scroll is not accurate.
+ */
+
 package viewport;
 
 import java.awt.BasicStroke;
@@ -12,14 +16,16 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 
-import managers.Viewport2DMouseManager;
+import managers.*;
 
 public class Viewport2D extends JPanel {
 
     private Point mouse, center;
 
+    private float BASE_PPU = 100;
+
+    // Variables
     private float PPU; // Pixel Per Unit
-    public static final float BASE_PPU = 100;
     private float step;
     private float minX, minY, maxX, maxY;
 
@@ -29,6 +35,7 @@ public class Viewport2D extends JPanel {
     private boolean canDrawGrid;
     private boolean canDrawAxis;
     private boolean canDrawDotLattice;
+    private boolean canUpdateStep;
 
     // CONTANTS
     private static BasicStroke gridStroke1 = new BasicStroke(1);
@@ -55,7 +62,7 @@ public class Viewport2D extends JPanel {
         mouse    = new Point();
         center   = new Point(sizeX / 2, sizeY / 2);
 
-        PPU  = 100;
+        PPU  = BASE_PPU;
         step = 1;
 
         minX = worldX(0);
@@ -64,9 +71,10 @@ public class Viewport2D extends JPanel {
         maxX = worldX(sizeX);
         maxY = worldY(0);
 
-        setGridRender(true);
-        setAxisRender(true);
-        setDotLatticeRender(false);
+        setGridRender(false);
+        setAxisRender(false);
+        setDotLatticeRender(true);
+        setInfiniteScroll(false);
     }
 
     // --- Rendering ---
@@ -76,7 +84,7 @@ public class Viewport2D extends JPanel {
         super.paintComponent(gfx);
 
         Graphics2D gfx2d = (Graphics2D) gfx;
-        gfx2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        gfx2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
         
         gfx2d.setColor(backgroundColor);
         // gfx2d.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -89,10 +97,7 @@ public class Viewport2D extends JPanel {
         drawDotLattice(gfx2d, 4);
 
         drawAxis(gfx2d);
-
-        // FUN
-        
-        
+        Viewport2DElementManager.renderElements(gfx2d, this);
     }
 
     private void Debug(Graphics2D gfx2d) {
@@ -133,17 +138,16 @@ public class Viewport2D extends JPanel {
         int originX = screenX(0);
         int originY = screenY(0);
         
-        gfx2d.setColor(Color.GREEN);
+        gfx2d.setColor(Color.CYAN);
         if (originX >= 0 && originX <= this.getWidth()) {
             gfx2d.drawLine(originX, 0, originX, this.getHeight());
         }
-        gfx2d.setColor(Color.RED);
+        gfx2d.setColor(Color.MAGENTA);
         if (originY >= 0 && originY <= this.getHeight()) {
             gfx2d.drawLine(0, originY, this.getWidth(), originY);
         }
     }
 
-    /* FIX: code infinite zoom illusion */
     private void drawDotLattice(Graphics2D gfx2d, int thickness) {
 
         if (!canDrawDotLattice) return;
@@ -177,30 +181,37 @@ public class Viewport2D extends JPanel {
     }
 
     public void setPPU(float value) {
+        if (value < 0) {
+            System.err.println("error: PPU cannot be negative");
+            return;
+        }
         PPU = value;
     }
 
-    public void setGridRender(boolean flag) {
-        canDrawGrid = flag;
+    public void setBasePPU(float value) { 
+        if (value < 0) {
+            System.err.println("error: Base PPU cannot be negative");
+            return;
+        }
+        BASE_PPU = value;
     }
 
-    public void setAxisRender(boolean flag) {
-        canDrawAxis = flag;   
-    }
+    public void setGridRender(boolean flag)       { canDrawGrid       = flag; }
+    public void setAxisRender(boolean flag)       { canDrawAxis       = flag; }
+    public void setDotLatticeRender(boolean flag) { canDrawDotLattice = flag; }
+    public void setInfiniteScroll(boolean flag)   { canUpdateStep     = flag; }
 
-    public void setDotLatticeRender(boolean flag) {
-        canDrawDotLattice = flag;
-    }
     // --- Getters ---
-    public Point getOrigin() { return center; }
-    public float getPPU()    { return PPU; }
+    public Point getOrigin()   { return center;   }
+    public float getPPU()      { return PPU;      }
+    public float getBASE_PPU() { return BASE_PPU; }
 
     // --- Utils ---
     public int screenX(float worldX) { return (int) (center.x + worldX * PPU); }
     public int screenY(float worldY) { return (int) (center.y - worldY * PPU); }
 
-    float worldX(int screenX) { return (screenX - center.x) / PPU; }
-    float worldY(int screenY) { return (center.y - screenY) / PPU; }
+    public float worldX(int screenX) { return (screenX - center.x) / PPU; }
+    public float worldY(int screenY) { return (center.y - screenY) / PPU; }
 
     public void UpdateWorldBounds() {
         minX = worldX(0);
@@ -225,5 +236,27 @@ public class Viewport2D extends JPanel {
 
         center.x -= pivotX_final - pivotX_init;
         center.y -= pivotY_final - pivotY_init;
+    }
+
+    public void UpdateStep() {
+        
+        if (!canUpdateStep)
+            return;
+        double rawStep = BASE_PPU / PPU;
+
+        int exponent   = (int) Math.floor(Math.log10(rawStep));
+        int base       = (int) (rawStep / Math.pow(10, exponent));
+
+        float snappedStep;
+        if (base < 1.5f) 
+            snappedStep = 1;
+        else if (base < 3.5f)
+            snappedStep = 2;
+        else if (base < 7.5f)
+            snappedStep = 5;
+        else
+            snappedStep = 10;
+
+        step = (float) (snappedStep * Math.pow(10, exponent));
     }
 }

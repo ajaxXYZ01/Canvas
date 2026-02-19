@@ -22,21 +22,21 @@ public class BazierCurve2D extends ViewportElement {
         anchorPoints  = new ArrayList <> ();
         controlPoints = new ArrayList <> ();
 
-        quality = 16;
+        quality  = 32;
         timeStep = 1f / quality;
     }
 
     // --- Utils ---
     public void addPoint(float x, float y) {
         anchorPoints.add(new Point2D(x, y));
-        recalculateHandles();
+        recalculateControlPoints();
     }
 
     public static float lerp(float a, float b, float t) {
         return (b - a) * t + a;
     }
 
-    public void recalculateHandles() {
+    public void recalculateControlPoints() {
         controlPoints.clear();
 
         for (int index = 0; index < anchorPoints.size() - 1; index++) {
@@ -124,6 +124,46 @@ public class BazierCurve2D extends ViewportElement {
         void print() {
             System.out.println(x + ", " + y);
         }
+    }
+
+    @Override
+    public void select(int x, int y, Viewport2D viewport2d) {
+        for (Point2D point2d : anchorPoints) {
+            point2d.select(x, y, viewport2d);
+        }
+
+        for (Point2D point2d : controlPoints) {
+            point2d.select(x, y, viewport2d);
+        }
+    }
+
+    @Override
+    public void offset(int dx, int dy, Viewport2D viewport2d) {
+        for (Point2D point2d : anchorPoints) {
+            if (point2d.isSelected())
+                point2d.offset(dx, dy, viewport2d);
+        }
+
+        for (Point2D point2d : controlPoints) {
+            if (point2d.isSelected())
+                point2d.offset(dx, dy, viewport2d);
+        }
+    }
+
+    @Override
+    public boolean isSelected() {
+
+        boolean bool = false;
+
+        for (Point2D point2d : anchorPoints) {
+            bool |= point2d.isSelected();
+        }
+
+        for (Point2D point2d : controlPoints) {
+            bool |= point2d.isSelected();
+        }
+
+        return bool;
     }
 
 }
