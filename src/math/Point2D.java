@@ -45,19 +45,19 @@ public class Point2D extends ViewportElement {
         int px = viewport2d.screenX(x);
         int py = viewport2d.screenY(y);
 
-        size *= 4;
+        size *= 3;
 
         if (selected) {
             gfx2d.setColor(color);
             gfx2d.fillOval(px - size / 2, py - size / 2, size, size);
-            size /= 4;
+            size /= 3;
             return;
         }
 
         gfx2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 64));
         gfx2d.fillOval(px - size / 2, py - size / 2, size, size);
 
-        size /= 4;
+        size /= 3;
         gfx2d.setColor(color);
         gfx2d.fillOval(px - size / 2, py - size / 2, size, size);
     }

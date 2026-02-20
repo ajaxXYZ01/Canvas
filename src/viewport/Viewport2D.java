@@ -71,9 +71,9 @@ public class Viewport2D extends JPanel {
         maxX = worldX(sizeX);
         maxY = worldY(0);
 
-        setGridRender(false);
-        setAxisRender(false);
-        setDotLatticeRender(true);
+        setGridRender(true);
+        setAxisRender(true);
+        setDotLatticeRender(false);
         setInfiniteScroll(false);
     }
 
@@ -138,13 +138,13 @@ public class Viewport2D extends JPanel {
         int originX = screenX(0);
         int originY = screenY(0);
         
-        gfx2d.setColor(Color.CYAN);
+        gfx2d.setColor(Color.GREEN);
         if (originX >= 0 && originX <= this.getWidth()) {
-            gfx2d.drawLine(originX, 0, originX, this.getHeight());
+            gfx2d.drawLine(originX, 0, originX, this.getHeight()); // Y-AXIS
         }
-        gfx2d.setColor(Color.MAGENTA);
+        gfx2d.setColor(Color.RED);
         if (originY >= 0 && originY <= this.getHeight()) {
-            gfx2d.drawLine(0, originY, this.getWidth(), originY);
+            gfx2d.drawLine(0, originY, this.getWidth(), originY); // X-AXIs
         }
     }
 
