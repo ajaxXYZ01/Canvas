@@ -100,6 +100,7 @@ public class BazierCurve2D extends ViewportElement {
         gfx2d.setStroke(curveStroke);
 
         for (float t = 0; t <= 1 - timeStep; t += timeStep) {
+            // FIX: Interpolating every frame, even though control point may not changed. use buffer.
             Point temp1 = getInterpolatedPoint(t);
             Point temp2 = getInterpolatedPoint(t + timeStep);
             gfx2d.drawLine(viewport2d.screenX(temp1.x), viewport2d.screenY(temp1.y), viewport2d.screenX(temp2.x), viewport2d.screenY(temp2.y));

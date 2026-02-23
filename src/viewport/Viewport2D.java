@@ -205,6 +205,10 @@ public class Viewport2D extends JPanel {
     public Point getOrigin()   { return center;   }
     public float getPPU()      { return PPU;      }
     public float getBASE_PPU() { return BASE_PPU; }
+    
+    public boolean canRenderAxis()       { return canDrawAxis; }
+    public boolean canRenderGrid()       { return canDrawGrid; }
+    public boolean canRenderDotLattice() { return canDrawDotLattice; }
 
     // --- Utils ---
     public int screenX(float worldX) { return (int) (center.x + worldX * PPU); }
