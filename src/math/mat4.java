@@ -5,7 +5,7 @@ public final class mat4 {
     public final float elem [];
 
     public mat4() {
-        elem = new float [9]; // row-major wise
+        elem = new float [16]; // row-major wise
     }
     
     public mat4 setIdentity() {
@@ -16,32 +16,6 @@ public final class mat4 {
         return this;
     }
 
-    // A * B
-    public static void mul(mat4 a, mat4 b, mat4 out) {
-
-        float []  ae = a.elem, be = b.elem, oe = out.elem;
-
-        oe[0]  = ae[0]*be[0]  + ae[1]*be[4]  + ae[2]*be[8]   + ae[3]*be[12];
-        oe[1]  = ae[0]*be[1]  + ae[1]*be[5]  + ae[2]*be[9]   + ae[3]*be[13];
-        oe[2]  = ae[0]*be[2]  + ae[1]*be[6]  + ae[2]*be[10]  + ae[3]*be[14];
-        oe[3]  = ae[0]*be[3]  + ae[1]*be[7]  + ae[2]*be[11]  + ae[3]*be[15];
-
-        oe[4]  = ae[4]*be[0]  + ae[5]*be[4]  + ae[6]*be[8]   + ae[7]*be[12];
-        oe[5]  = ae[4]*be[1]  + ae[5]*be[5]  + ae[6]*be[9]   + ae[7]*be[13];
-        oe[6]  = ae[4]*be[2]  + ae[5]*be[6]  + ae[6]*be[10]  + ae[7]*be[14];
-        oe[7]  = ae[4]*be[3]  + ae[5]*be[7]  + ae[6]*be[11]  + ae[7]*be[15];
-
-        oe[8]  = ae[8]*be[0]  + ae[9]*be[4]  + ae[10]*be[8]  + ae[11]*be[12];
-        oe[9]  = ae[8]*be[1]  + ae[9]*be[5]  + ae[10]*be[9]  + ae[11]*be[13];
-        oe[10] = ae[8]*be[2]  + ae[9]*be[6]  + ae[10]*be[10] + ae[11]*be[14];
-        oe[11] = ae[8]*be[3]  + ae[9]*be[7]  + ae[10]*be[11] + ae[11]*be[15];
-
-        oe[12] = ae[12]*be[0] + ae[13]*be[4] + ae[14]*be[8]  + ae[15]*be[12];
-        oe[13] = ae[12]*be[1] + ae[13]*be[5] + ae[14]*be[9]  + ae[15]*be[13];
-        oe[14] = ae[12]*be[2] + ae[13]*be[6] + ae[14]*be[10] + ae[15]*be[14];
-        oe[15] = ae[12]*be[3] + ae[13]*be[7] + ae[14]*be[11] + ae[15]*be[15];
-    }
-    
     // A + B
     public static void add(mat4 a, mat4 b, mat4 out) {
         float []  TMP_a = a.elem, TMP_b = b.elem, TMP_out = out.elem;
@@ -92,6 +66,49 @@ public final class mat4 {
         TMP_out[15] = TMP_a[15] - TMP_b[15];
     }
 
+    // public void scale(float sx, float sy, float sz) {
+    //     float m [] = elem;
+
+    //     m[0]  *= sx; m[1]  *= sx; m[2]  *= sx;
+    //     m[4]  *= sy; m[5]  *= sy; m[6]  *= sy;
+    //     m[8]  *= sz; m[9]  *= sz; m[10] *= sz;
+    // }
+
+    // public void scale4(float sx, float sy, float sz, float sw) {
+    //     float m [] = elem;
+
+    //     m[0]  *= sx; m[1]  *= sx; m[2]  *= sx; m[3]  *= sx;
+    //     m[4]  *= sy; m[5]  *= sy; m[6]  *= sy; m[7]  *= sy;
+    //     m[8]  *= sz; m[9]  *= sz; m[10] *= sz; m[11] *= sz;
+    //     m[12] *= sw; m[13] *= sw; m[14] *= sw; m[15] *= sw;
+    // }
+
+    // A * B
+    public static void mul(mat4 a, mat4 b, mat4 out) {
+
+        float []  ae = a.elem, be = b.elem, oe = out.elem;
+
+        oe[0]  = ae[0]*be[0]  + ae[1]*be[4]  + ae[2]*be[8]   + ae[3]*be[12];
+        oe[1]  = ae[0]*be[1]  + ae[1]*be[5]  + ae[2]*be[9]   + ae[3]*be[13];
+        oe[2]  = ae[0]*be[2]  + ae[1]*be[6]  + ae[2]*be[10]  + ae[3]*be[14];
+        oe[3]  = ae[0]*be[3]  + ae[1]*be[7]  + ae[2]*be[11]  + ae[3]*be[15];
+
+        oe[4]  = ae[4]*be[0]  + ae[5]*be[4]  + ae[6]*be[8]   + ae[7]*be[12];
+        oe[5]  = ae[4]*be[1]  + ae[5]*be[5]  + ae[6]*be[9]   + ae[7]*be[13];
+        oe[6]  = ae[4]*be[2]  + ae[5]*be[6]  + ae[6]*be[10]  + ae[7]*be[14];
+        oe[7]  = ae[4]*be[3]  + ae[5]*be[7]  + ae[6]*be[11]  + ae[7]*be[15];
+
+        oe[8]  = ae[8]*be[0]  + ae[9]*be[4]  + ae[10]*be[8]  + ae[11]*be[12];
+        oe[9]  = ae[8]*be[1]  + ae[9]*be[5]  + ae[10]*be[9]  + ae[11]*be[13];
+        oe[10] = ae[8]*be[2]  + ae[9]*be[6]  + ae[10]*be[10] + ae[11]*be[14];
+        oe[11] = ae[8]*be[3]  + ae[9]*be[7]  + ae[10]*be[11] + ae[11]*be[15];
+
+        oe[12] = ae[12]*be[0] + ae[13]*be[4] + ae[14]*be[8]  + ae[15]*be[12];
+        oe[13] = ae[12]*be[1] + ae[13]*be[5] + ae[14]*be[9]  + ae[15]*be[13];
+        oe[14] = ae[12]*be[2] + ae[13]*be[6] + ae[14]*be[10] + ae[15]*be[14];
+        oe[15] = ae[12]*be[3] + ae[13]*be[7] + ae[14]*be[11] + ae[15]*be[15];
+    }
+    
     public float det() {
         float [] m = elem;
 
@@ -158,5 +175,17 @@ public final class mat4 {
         o[15] = (+ m[8]*a3  - m[9]*a1  + m[10]*a0) * invDet;
 
         return true;
+    }
+
+    // --- Utils ---
+
+    public void print() {
+        for (int i = 0; i < 16; i++) {
+            if (i % 4 == 0)
+                System.out.print("[\t");
+            System.out.printf("%.2f\t", elem[i]);
+            if(i % 4 == 3)
+                System.out.println("]");
+        }
     }
 }
