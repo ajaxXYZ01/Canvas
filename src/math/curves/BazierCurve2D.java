@@ -1,10 +1,11 @@
-package math;
+package math.curves;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import math.Point2D;
 import viewport.Viewport2D;
 import viewport.ViewportElement;
 
