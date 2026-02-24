@@ -5,7 +5,8 @@ public final class mat4 {
     public final float elem [];
 
     public mat4() {
-        elem = new float [16]; // row-major wise
+        // automatically initialized to 0.0f for every element after creation
+        elem = new float [16]; // row-major
     }
     
     public mat4 setIdentity() {
@@ -65,23 +66,6 @@ public final class mat4 {
         TMP_out[14] = TMP_a[14] - TMP_b[14];
         TMP_out[15] = TMP_a[15] - TMP_b[15];
     }
-
-    // public void scale(float sx, float sy, float sz) {
-    //     float m [] = elem;
-
-    //     m[0]  *= sx; m[1]  *= sx; m[2]  *= sx;
-    //     m[4]  *= sy; m[5]  *= sy; m[6]  *= sy;
-    //     m[8]  *= sz; m[9]  *= sz; m[10] *= sz;
-    // }
-
-    // public void scale4(float sx, float sy, float sz, float sw) {
-    //     float m [] = elem;
-
-    //     m[0]  *= sx; m[1]  *= sx; m[2]  *= sx; m[3]  *= sx;
-    //     m[4]  *= sy; m[5]  *= sy; m[6]  *= sy; m[7]  *= sy;
-    //     m[8]  *= sz; m[9]  *= sz; m[10] *= sz; m[11] *= sz;
-    //     m[12] *= sw; m[13] *= sw; m[14] *= sw; m[15] *= sw;
-    // }
 
     // A * B
     public static void mul(mat4 a, mat4 b, mat4 out) {
