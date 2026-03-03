@@ -15,7 +15,7 @@ public class Arrow extends ViewportElement {
     private Point2D tail, head;
     private vec2 p1, p2, temp;
 
-    private float angle, len;
+    private float angle, len; // len is in Pixels
     private final BasicStroke arrowStroke = new BasicStroke(2);
 
     public Arrow(float x1, float y1, float x2, float y2) {
@@ -28,12 +28,13 @@ public class Arrow extends ViewportElement {
         head.setSize(4);
 
         temp = new vec2();
-        angle = (float) Math.toRadians(45); len = 0.125f;
+        angle = (float) Math.toRadians(45);
+        len = 0.125f;
 
-        UpdatePoints(100);
+        UpdatePoints();
     }
 
-    public void UpdatePoints(float PPU) {
+    public void UpdatePoints() {
         temp.x = tail.x - head.x;
         temp.y = tail.y - head.y;
 
@@ -80,11 +81,13 @@ public class Arrow extends ViewportElement {
 
     @Override
     public void offset(int dx, int dy, Viewport2D viewport2d) {
+
         if (head.isSelected())
             head.offset(dx, dy, viewport2d);
         if (tail.isSelected())
             tail.offset(dx, dy, viewport2d);
-        UpdatePoints(viewport2d.getPPU());
+
+        UpdatePoints();
     }
 
     @Override

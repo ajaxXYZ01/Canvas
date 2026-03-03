@@ -80,5 +80,4 @@ public class Point2D extends ViewportElement {
         x += dx / viewport2d.getPPU();
         y -= dy / viewport2d.getPPU();
     }
-
 }

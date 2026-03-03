@@ -110,8 +110,8 @@ public class BazierCurve2D extends ViewportElement {
         for (Point2D point2d : controlPoints) {
             point2d.render(gfx2d, viewport2d);
         }
-    }    
-
+    }
+    
     @Override
     public void select(int x, int y, Viewport2D viewport2d) {
         for (Point2D point2d : controlPoints) {

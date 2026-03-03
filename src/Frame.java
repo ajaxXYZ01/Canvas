@@ -3,8 +3,6 @@ import java.time.LocalDateTime;
 
 import javax.swing.JFrame;
 
-import managers.Viewport2DElementManager;
-import tools.Arrow;
 import ui.Inspector;
 import utils.Icons;
 import viewport.Viewport2D;
@@ -30,12 +28,7 @@ class Frame extends JFrame {
     }
 
     public static void main(String args[]) {
-
-        Arrow arrow = new Arrow(0, 0, 1, 1);
-
-        Viewport2DElementManager.addElement(arrow);
-
-        new Frame();
+        // new Frame();
     }
 
 }
