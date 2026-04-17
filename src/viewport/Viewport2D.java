@@ -17,9 +17,10 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JPanel;
 
 import managers.*;
-import utils.MathUtils;
 
 public class Viewport2D extends JPanel {
+
+    Viewport2DElementManager current_scene;
 
     private Point mouse, center;
 
@@ -98,26 +99,7 @@ public class Viewport2D extends JPanel {
         drawDotLattice(gfx2d, 4);
 
         drawAxis(gfx2d);
-        Viewport2DElementManager.renderElements(gfx2d, this);
-
-        for (int n = 1; n <= 99 - 1; n++) {
-
-            int p1x = screenX(n);
-            int p1y = screenY(MathUtils.Reverse(n) / (float) n);
-
-            int p2x = screenX(n + 1);
-            int p2y = screenY(MathUtils.Reverse(n + 1) / (float) (n + 1));
-
-            gfx2d.setStroke(axisStroke2);
-
-            gfx2d.setColor(Color.RED);
-            gfx2d.fillOval(p1x - 3, p1y - 3, 6, 6);
-            gfx2d.fillOval(p2x - 3, p2y - 3, 6, 6);
-
-            gfx2d.setColor(Color.WHITE);
-            gfx2d.drawLine(p1x, p1y, p2x, p2y);
-        }
-
+        current_scene.renderElements(gfx2d, this);
     }
 
     private void Debug(Graphics2D gfx2d) {
@@ -216,6 +198,10 @@ public class Viewport2D extends JPanel {
         BASE_PPU = value;
     }
 
+    public void setCurrentScene(Viewport2DElementManager scene) {
+        current_scene = scene;
+    }
+
     public void setGridRender(boolean flag)       { canDrawGrid       = flag; }
     public void setAxisRender(boolean flag)       { canDrawAxis       = flag; }
     public void setDotLatticeRender(boolean flag) { canDrawDotLattice = flag; }
@@ -225,6 +211,7 @@ public class Viewport2D extends JPanel {
     public Point getOrigin()   { return center;   }
     public float getPPU()      { return PPU;      }
     public float getBASE_PPU() { return BASE_PPU; }
+    public Viewport2DElementManager getCurrentScene() { return current_scene; }
     
     public boolean canRenderAxis()       { return canDrawAxis; }
     public boolean canRenderGrid()       { return canDrawGrid; }

@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import math.Point2D;
+import ui.Inspector;
 import viewport.Viewport2D;
 import viewport.ViewportElement;
 
@@ -134,6 +135,11 @@ public class BazierCurve2D extends ViewportElement {
             bool |= point2d.isSelected();
         }
         return bool;
+    }
+
+    @Override
+    public void inspector(Inspector inspector) {
+        //
     }
 
 }

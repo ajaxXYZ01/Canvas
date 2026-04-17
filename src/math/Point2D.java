@@ -3,6 +3,7 @@ package math;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
+import ui.Inspector;
 import viewport.Viewport2D;
 import viewport.ViewportElement;
 
@@ -79,5 +80,10 @@ public class Point2D extends ViewportElement {
     public void offset(int dx, int dy, Viewport2D viewport2d) {
         x += dx / viewport2d.getPPU();
         y -= dy / viewport2d.getPPU();
+    }
+
+    @Override
+    public void inspector(Inspector inspector) {
+        //
     }
 }

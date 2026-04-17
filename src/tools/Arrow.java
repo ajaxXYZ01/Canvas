@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import math.vec2;
+import ui.Inspector;
 import math.Point2D;
 import viewport.Viewport2D;
 import viewport.ViewportElement;
@@ -93,5 +94,10 @@ public class Arrow extends ViewportElement {
     @Override
     public boolean isSelected() {
         return head.isSelected() || tail.isSelected();
+    }
+
+    @Override
+    public void inspector(Inspector inspector) {
+        //
     }
 }

@@ -30,7 +30,7 @@ public class Viewport2DMouseManager implements MouseInputListener, MouseWheelLis
     public void mousePressed(MouseEvent e) {
         mouseLeftDown    = true;
         lastMousePressed = e.getPoint();
-        Viewport2DElementManager.selectElements(e, viewport);
+        viewport.getCurrentScene().selectElements(e, viewport);
     }
 
     @Override
@@ -62,8 +62,8 @@ public class Viewport2DMouseManager implements MouseInputListener, MouseWheelLis
             lastMousePressed.x = e.getX();
             lastMousePressed.y = e.getY();
 
-            if (Viewport2DElementManager.hasSelectedElements()) {
-                Viewport2DElementManager.moveSelectedElements(dx, dy, viewport);
+            if (viewport.getCurrentScene().hasSelectedElements()) {
+                viewport.getCurrentScene().moveSelectedElements(dx, dy, viewport);
                 viewport.UpdateWorldBounds();
                 viewport.repaint();
                 return;
