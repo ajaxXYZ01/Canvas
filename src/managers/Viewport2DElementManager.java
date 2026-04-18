@@ -35,12 +35,15 @@ public class Viewport2DElementManager {
     public void selectElements(MouseEvent event, Viewport2D viewport) {
         for (ViewportElement element : elementList) {
             element.select(event.getX(), event.getY(), viewport);
+            if (element.isSelected())
+                return;
         }
     }
 
     public void moveSelectedElements(int dx, int dy, Viewport2D viewport) {
         for (ViewportElement element : elementList) {
-            element.offset(dx, dy, viewport);
+            if (element.isSelected())
+                element.offset(dx, dy, viewport);
         }
     }
 

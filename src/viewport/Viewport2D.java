@@ -73,10 +73,10 @@ public class Viewport2D extends JPanel {
         maxX = worldX(sizeX);
         maxY = worldY(0);
 
-        setGridRender(true);
-        setAxisRender(true);
-        setDotLatticeRender(false);
-        setInfiniteScroll(true);
+        setGridRender(false);
+        setAxisRender(false);
+        setDotLatticeRender(true);
+        setInfiniteScroll(false);
     }
 
     // --- Rendering ---

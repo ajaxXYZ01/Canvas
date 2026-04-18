@@ -36,6 +36,7 @@ public class Point2D extends ViewportElement {
     public void setColor(Color color) { this.color = color; }
 
     // --- Getters ---
+    public int getSize() { return size; }
 
     // --- Utils ---
     public boolean isSelected() { return selected; }

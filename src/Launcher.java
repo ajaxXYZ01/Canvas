@@ -1,3 +1,4 @@
+import tools.Arrow;
 import tools.Text;
 
 public class Launcher {
@@ -6,8 +7,8 @@ public class Launcher {
 
         Window window = new Window(800, 600);
 
-        Text text = new Text();
-        
-        window.getScene().addElement(text);
+        Text text1 = new Text(window.getViewport());
+        window.getScene().addElement(text1);
+
     }
 }
