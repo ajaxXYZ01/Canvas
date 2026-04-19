@@ -216,6 +216,7 @@ public class Viewport2D extends JPanel {
     public boolean canRenderAxis()       { return canDrawAxis; }
     public boolean canRenderGrid()       { return canDrawGrid; }
     public boolean canRenderDotLattice() { return canDrawDotLattice; }
+    public boolean canInfiniteScroll()   { return canUpdateStep; }
 
     // --- Utils ---
     public int screenX(float worldX) { return (int) (center.x + worldX * PPU); }

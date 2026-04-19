@@ -5,10 +5,14 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class Icons {
+
     public static final BufferedImage LOGO = load("res//logo.png");
     public static final BufferedImage PEN  = load("res//pen-icon2.png");
+    public static final ImageIcon CHECKED_ICON = new ImageIcon("res\\Icons\\checked.png");
+    public static final ImageIcon EMPTY_ICON = new ImageIcon("res\\Icons\\empty.png");
 
     private static BufferedImage load(String path) {
         try {
@@ -17,4 +21,5 @@ public class Icons {
             throw new RuntimeException("Failed to load image: " + path);
         }
     }
+
 }

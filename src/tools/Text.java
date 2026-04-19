@@ -46,7 +46,7 @@ public class Text extends ViewportElement{
 
         anchor = new Point2D(viewport.worldX(0), viewport.worldY(0));
 
-        anchor.setSize(8);
+        anchor.setSize(10);
         anchor.setColor(Color.ORANGE);
 
         text = "";
@@ -94,7 +94,7 @@ public class Text extends ViewportElement{
             gfx2d.setStroke(OUTLINE_STROKE);
 
             outline_width = gfx2d.getFontMetrics(font).stringWidth(longest_line);
-            gfx2d.drawRect(x, y, (int) (outline_width * scale), (int) (lines.length * lineHeight * scale));
+            gfx2d.drawRect(x, y, (int) (outline_width * scale), (int) ((lines.length + 1) * lineHeight * scale));
 
             gfx2d.setStroke(oldStroke);
         }

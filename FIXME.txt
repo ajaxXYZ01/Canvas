@@ -1,2 +1,6 @@
 1. BazierCurve2D: Interpolating every frame, even though control point may not have changed. Use buffer.
-2. 
+
+2. Viewport2D: private Point center has Interger coordinates. While scrolling, center loses its fraction part
+so the scroll is not accurate.
+
+
