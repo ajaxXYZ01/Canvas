@@ -1,9 +1,16 @@
 package viewport;
 import java.awt.Graphics2D;
 
+import math.AABB;
 import ui.Inspector;
 
 public abstract class ViewportElement {
+
+    protected AABB aabb;
+
+    public ViewportElement() {
+        
+    }
 
     private boolean selected;
 
@@ -13,4 +20,7 @@ public abstract class ViewportElement {
     public abstract void inspector(Inspector inspector);
 
     public abstract boolean isSelected();
+
+    public AABB getAABB() { return aabb; }
+
 }

@@ -12,15 +12,15 @@ import viewport.ViewportElement;
 
 public class Viewport2DElementManager {
 
-    Inspector inspector;
     private ArrayList <ViewportElement> elementList = new ArrayList <> ();
 
-    public Viewport2DElementManager(Inspector inspector) {
-        this.inspector = inspector;
+    public Viewport2DElementManager() {
+        //
     }
 
     public void addElement(ViewportElement element) {
         elementList.add(element);
+        Inspector inspector = WindowManager.getInspector();
         element.inspector(inspector);
         inspector.revalidate();
         inspector.repaint();
@@ -49,7 +49,8 @@ public class Viewport2DElementManager {
 
     public void renderElements(Graphics2D gfx2d, Viewport2D viewport) {
         for (ViewportElement element : elementList) {
-            element.render(gfx2d, viewport);
+            if (element.getAABB().intersects(viewport.view_bounds))
+                element.render(gfx2d, viewport);
         }
     }
 

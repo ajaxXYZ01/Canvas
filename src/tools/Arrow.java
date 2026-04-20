@@ -2,24 +2,41 @@ package tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.plaf.basic.BasicSliderUI;
+
+import managers.Viewport2DElementManager;
 import math.vec2;
 import ui.Inspector;
+import utils.Colors;
+import math.AABB;
 import math.Point2D;
 import viewport.Viewport2D;
 import viewport.ViewportElement;
 
-// FIX: SHOULD NOT RESPOND TO VIEWPORT ZOOM
 public class Arrow extends ViewportElement {
 
-    private Point2D tail, head;
+    public Point2D tail, head;
     private vec2 p1, p2, temp;
 
-    private float angle, len; // len is in Pixels
-    private final BasicStroke arrowStroke = new BasicStroke(2);
+    private float angle, base_len, len; // len is in world units
+    private BasicStroke arrowStroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+
+    private float thickness;
+    private int CAP;
+    private int JOIN;
 
     public Arrow(float x1, float y1, float x2, float y2) {
+
+        super();
+
         tail = new Point2D(x1, y1);
         tail.setColor(Color.WHITE);
         tail.setSize(4);
@@ -30,7 +47,11 @@ public class Arrow extends ViewportElement {
 
         temp = new vec2();
         angle = (float) Math.toRadians(45);
-        len = 0.125f;
+        
+        base_len = 0.25f;
+        len = base_len;
+
+        aabb = new AABB();
 
         UpdatePoints();
     }
@@ -56,6 +77,39 @@ public class Arrow extends ViewportElement {
         vec2 headVec2 = new vec2(head.x, head.y);
         p1.add(headVec2);
         p2.add(headVec2);
+
+        aabb.min.x = Math.min(tail.x, head.x);
+        aabb.min.y = Math.min(tail.y, head.y);
+        aabb.max.x = Math.max(tail.x, head.x);
+        aabb.max.y = Math.max(tail.y, head.y);
+
+    }
+
+    public void UpdateScale(Viewport2D viewport) {
+
+        p1.x -= head.x;
+        p1.y -= head.y;
+
+        p2.x -= head.x;
+        p2.y -= head.y;
+
+        p1.scale(1 / len);
+        p2.scale(1 / len);
+
+        len = base_len * viewport.getBASE_PPU() / viewport.getPPU();
+
+        p1.scale(len);
+        p2.scale(len);
+
+        p1.x += head.x;
+        p1.y += head.y;
+
+        p2.x += head.x;
+        p2.y += head.y;
+    }
+
+    public void setThickness(float t) {
+        this.arrowStroke = new BasicStroke(t);
     }
 
     @Override
@@ -63,6 +117,8 @@ public class Arrow extends ViewportElement {
 
         gfx2d.setColor(Color.WHITE);
         gfx2d.setStroke(arrowStroke);
+
+        UpdateScale(viewport2d);
 
         int hx = viewport2d.screenX(head.x), hy = viewport2d.screenY(head.y);
 
@@ -72,6 +128,8 @@ public class Arrow extends ViewportElement {
 
         tail.render(gfx2d, viewport2d);
         head.render(gfx2d, viewport2d);
+
+        aabb.render(gfx2d, viewport2d);
     }
 
     @Override
@@ -98,6 +156,38 @@ public class Arrow extends ViewportElement {
 
     @Override
     public void inspector(Inspector inspector) {
-        //
+
+        JLabel label = new JLabel("Arrow");
+        label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        label.setForeground(Color.LIGHT_GRAY);
+
+        JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 16, 2);
+
+        slider.setBackground(Colors.inspector_pane);
+        slider.setForeground(Color.WHITE);
+        slider.setOpaque(true);
+
+        slider.setBorder(null);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.setFocusable(false);
+        slider.setMajorTickSpacing(2);
+        slider.setMinorTickSpacing(1);
+        slider.setSnapToTicks(true);
+
+        slider.setPreferredSize(new Dimension(inspector.getContent().getWidth(), 0));
+
+        slider.addChangeListener(e -> {
+            setThickness(slider.getValue());
+            inspector.getViewport().repaint();
+        });
+
+        JPanel pane = new JPanel();
+        pane.setBackground(Colors.inspector_pane);
+        pane.setLayout(new BoxLayout(pane, BoxLayout.Y_AXIS));
+        pane.add(label);
+        pane.add(slider);
+
+        inspector.getContent().add(pane);
     }
 }

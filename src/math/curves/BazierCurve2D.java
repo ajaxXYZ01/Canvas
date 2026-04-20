@@ -24,6 +24,9 @@ public class BazierCurve2D extends ViewportElement {
     private float timeStep;
 
     public BazierCurve2D() {
+
+        super();
+
         controlPoints  = new ArrayList <> ();
 
         quality  = 32;

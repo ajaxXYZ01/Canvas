@@ -19,6 +19,8 @@ public class Point2D extends ViewportElement {
 
     public Point2D(float x, float y) {
 
+        super();
+
         this.x = x;
         this.y = y;
 

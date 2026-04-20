@@ -2,12 +2,14 @@ package ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import utils.Colors;
@@ -38,6 +40,13 @@ public class CanvasMenuBar extends JMenuBar {
         JMenuItem toggle_grid = createMenuItem("Toggle Grid");
         JMenuItem toggle_dot_lattice = createMenuItem("Toggle Dot Lattice");
         JMenuItem adaptive_grid = createMenuItem("Adaptive Grid");
+        JMenuItem home = createMenuItem("Home");
+
+        // --------------------------------
+        // Menu Item Key Mapping
+        // --------------------------------
+
+        
 
         // --------------------------------
         // Menu Item Events
@@ -83,6 +92,14 @@ public class CanvasMenuBar extends JMenuBar {
             viewport.repaint();
         });
 
+        home.addActionListener(e -> {
+            
+            // viewport.setPPU(viewport.getBASE_PPU);
+            System.out.println("Home!");
+
+            viewport.repaint();
+        });
+
         // --------------------------------
         // Add Menu Item to Menu
         // --------------------------------
@@ -91,6 +108,7 @@ public class CanvasMenuBar extends JMenuBar {
         view.add(toggle_grid);
         view.add(toggle_dot_lattice);
         view.add(adaptive_grid);
+        view.add(home);
 
         // --------------------------------
         // Add Menus

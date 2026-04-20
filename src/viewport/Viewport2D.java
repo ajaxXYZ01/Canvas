@@ -17,6 +17,7 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JPanel;
 
 import managers.*;
+import math.AABB;
 
 public class Viewport2D extends JPanel {
 
@@ -30,6 +31,7 @@ public class Viewport2D extends JPanel {
     private float PPU; // Pixel Per Unit
     private float step;
     private float minX, minY, maxX, maxY;
+    public AABB view_bounds;
 
     private Color backgroundColor;
 
@@ -77,6 +79,9 @@ public class Viewport2D extends JPanel {
         setAxisRender(false);
         setDotLatticeRender(true);
         setInfiniteScroll(false);
+
+        view_bounds = new AABB(minX, minY, maxX, maxY);
+        view_bounds.setWHITE();
     }
 
     // --- Rendering ---
@@ -99,7 +104,9 @@ public class Viewport2D extends JPanel {
         drawDotLattice(gfx2d, 4);
 
         drawAxis(gfx2d);
+
         current_scene.renderElements(gfx2d, this);
+        view_bounds.render(gfx2d, this);
     }
 
     private void Debug(Graphics2D gfx2d) {
@@ -231,6 +238,15 @@ public class Viewport2D extends JPanel {
 
         maxX = worldX(this.getWidth());
         maxY = worldY(0);
+
+        UpdateViewBounds();
+    }
+
+    public void UpdateViewBounds() {
+        view_bounds.min.x = minX;
+        view_bounds.min.y = minY; 
+        view_bounds.max.x = maxX;
+        view_bounds.max.y = maxY;
     }
 
     public void UpdateCenterOnScroll(Point event, float factor) {

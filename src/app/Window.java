@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import javax.swing.JFrame;
 
 import managers.Viewport2DElementManager;
+import managers.WindowManager;
 import ui.CanvasMenuBar;
 import ui.Inspector;
 import utils.Icons;
@@ -27,11 +28,15 @@ public class Window extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         inspector = new Inspector();
-        scene     = new Viewport2DElementManager(inspector);
         viewport  = new Viewport2D(width - inspector.getWidth(), height);
-        menuBar   = new CanvasMenuBar(this);
+        scene     = new Viewport2DElementManager();
 
+        WindowManager.setInspector(inspector);
+        WindowManager.setViewport(viewport);
+        WindowManager.setCurrentScene(scene);
         viewport.setCurrentScene(scene);
+
+        menuBar   = new CanvasMenuBar(this);
 
         this.add(inspector, BorderLayout.WEST);
         this.add(viewport, BorderLayout.CENTER);
@@ -42,8 +47,6 @@ public class Window extends JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public Inspector getInspector()            { return inspector; }
-    public Viewport2DElementManager getScene() { return scene;     }
-    public Viewport2D getViewport()            { return viewport;  }
+    public Viewport2D getViewport() { return viewport; }
 
 }

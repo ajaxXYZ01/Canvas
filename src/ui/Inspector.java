@@ -1,11 +1,12 @@
 package ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import utils.Colors;
 
 public class Inspector extends CanvasScrollPane {
     
@@ -21,11 +22,11 @@ public class Inspector extends CanvasScrollPane {
         width = 200;
 
         inspectorContent.setLayout(new BoxLayout(inspectorContent, BoxLayout.Y_AXIS));
-        inspectorContent.setBackground(new Color(8, 8, 8));
+        inspectorContent.setBackground(Colors.inspector_pane);
         inspectorContent.setOpaque(true);
 
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setPreferredSize(new Dimension(width, 0));
     }
 

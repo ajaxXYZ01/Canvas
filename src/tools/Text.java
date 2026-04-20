@@ -44,6 +44,8 @@ public class Text extends ViewportElement{
 
     public Text(Viewport2D viewport) {
 
+        super();
+
         anchor = new Point2D(viewport.worldX(0), viewport.worldY(0));
 
         anchor.setSize(10);

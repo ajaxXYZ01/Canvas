@@ -3,4 +3,7 @@
 2. Viewport2D: private Point center has Interger coordinates. While scrolling, center loses its fraction part
 so the scroll is not accurate.
 
+3. Arrow: SHOULD NOT RESPOND TO VIEWPORT ZOOM | fixed for now
+
+4. try using pixel length for arrow head base length
 
